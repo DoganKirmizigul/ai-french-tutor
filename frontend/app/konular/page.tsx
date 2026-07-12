@@ -133,12 +133,12 @@ export default function KonularPage() {
           className="flex gap-2"
         >
           <input
-            className="input flex-1"
+            className="input flex-1 min-w-0"
             placeholder="e.g. aller verb, conjunctions, passé composé…"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <select value={level} onChange={(e) => setLevel(e.target.value)} className="input w-20">
+          <select value={level} onChange={(e) => setLevel(e.target.value)} className="input !w-20 shrink-0">
             {LEVELS.map((l) => <option key={l}>{l}</option>)}
           </select>
           <button type="submit" disabled={loading === "explain"} className="btn-primary flex items-center gap-1">
