@@ -58,6 +58,13 @@ CREATE TABLE IF NOT EXISTS error_log (
     topic TEXT DEFAULT '',
     reason TEXT DEFAULT ''
 );
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    messages TEXT NOT NULL DEFAULT '[]',
+    created TEXT NOT NULL,
+    updated TEXT NOT NULL
+);
 """
 
 
@@ -339,3 +346,52 @@ def get_all_topic_stats() -> dict:
         r["topic_id"]: {"name": r["topic_name"], **get_topic_stat(r["topic_id"])}
         for r in rows
     }
+
+
+# ── Chat Sessions ─────────────────────────────────────────────────────────────
+
+def list_chat_sessions() -> list:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT id, title, created, updated FROM chat_sessions ORDER BY updated DESC"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_chat_session(session_id: int) -> dict | None:
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT * FROM chat_sessions WHERE id = ?", (session_id,)
+        ).fetchone()
+    if not row:
+        return None
+    s = dict(row)
+    s["messages"] = json.loads(s["messages"])
+    return s
+
+
+def create_chat_session(title: str, messages: list) -> int:
+    now = datetime.now().isoformat(timespec="seconds")
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO chat_sessions (title, messages, created, updated) VALUES (?, ?, ?, ?)",
+            (title, json.dumps(messages, ensure_ascii=False), now, now),
+        )
+        conn.commit()
+        return cur.lastrowid
+
+
+def update_chat_session(session_id: int, messages: list) -> None:
+    now = datetime.now().isoformat(timespec="seconds")
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE chat_sessions SET messages = ?, updated = ? WHERE id = ?",
+            (json.dumps(messages, ensure_ascii=False), now, session_id),
+        )
+        conn.commit()
+
+
+def delete_chat_session(session_id: int) -> None:
+    with get_conn() as conn:
+        conn.execute("DELETE FROM chat_sessions WHERE id = ?", (session_id,))
+        conn.commit()
