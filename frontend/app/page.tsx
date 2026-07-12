@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { api, Profile, Badge, Session, SrsStats } from "@/lib/api";
 import { Flame, Target, TrendingUp, WalletCards } from "lucide-react";
 import {
@@ -20,6 +21,7 @@ interface ProfileData {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
   const [data, setData] = useState<ProfileData | null>(null);
   const [error, setError] = useState("");
 
@@ -27,9 +29,15 @@ export default function Dashboard() {
     api
       .post("/api/profile/touch")
       .then(() => api.get<ProfileData>("/api/profile"))
-      .then(setData)
+      .then((d) => {
+        if (!d.profile.placement_done) {
+          router.replace("/placement");
+        } else {
+          setData(d);
+        }
+      })
       .catch((e) => setError(e.message));
-  }, []);
+  }, [router]);
 
   if (error)
     return <div className="card border-red-300 text-red-600">Could not reach backend: {error}</div>;
