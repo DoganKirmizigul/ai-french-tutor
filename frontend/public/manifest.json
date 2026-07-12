@@ -1,0 +1,16 @@
+{
+  "name": "Fransızca Öğretmenim",
+  "short_name": "Fransızca",
+  "description": "AI destekli kişisel Fransızca öğretmeni",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#667eea",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
