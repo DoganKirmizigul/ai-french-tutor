@@ -24,8 +24,8 @@ class SuggestReq(BaseModel):
 
 
 @router.get("/due")
-def due():
-    return {"due": db.get_due_srs_items(), "stats": db.get_srs_stats()}
+def due(all: bool = False):
+    return {"due": db.get_due_srs_items(all_cards=all), "stats": db.get_srs_stats()}
 
 
 @router.get("/all")
@@ -44,6 +44,17 @@ def answer(req: AnswerReq):
     if req.score not in (0, 1, 2, 3):
         raise HTTPException(400, "score must be 0-3")
     db.update_srs_item(req.word, req.score)
+    return {"ok": True}
+
+
+class SuspendReq(BaseModel):
+    word: str
+    suspended: bool = True
+
+
+@router.post("/suspend")
+def suspend(req: SuspendReq):
+    db.suspend_srs_item(req.word, req.suspended)
     return {"ok": True}
 
 

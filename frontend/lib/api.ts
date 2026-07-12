@@ -72,6 +72,7 @@ export interface SrsStats {
   total: number;
   due_today: number;
   learned: number;
+  suspended: number;
 }
 
 export interface Exercise {

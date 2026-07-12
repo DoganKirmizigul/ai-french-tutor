@@ -74,7 +74,12 @@ def get_conn() -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.executescript(_SCHEMA)
     conn.execute("INSERT OR IGNORE INTO profile (id) VALUES (1)")
-    conn.commit()
+    # incremental migrations
+    try:
+        conn.execute("ALTER TABLE srs_items ADD COLUMN suspended INTEGER DEFAULT 0")
+        conn.commit()
+    except Exception:
+        pass
     return conn
 
 
@@ -248,13 +253,24 @@ def bulk_add_srs_items(words: list) -> int:
     return added
 
 
-def get_due_srs_items() -> list:
+def get_due_srs_items(all_cards: bool = False) -> list:
     today = date.today().isoformat()
     with get_conn() as conn:
-        rows = conn.execute(
-            "SELECT * FROM srs_items WHERE next_review <= ? ORDER BY next_review", (today,)
-        ).fetchall()
+        if all_cards:
+            rows = conn.execute(
+                "SELECT * FROM srs_items WHERE suspended = 0 ORDER BY next_review"
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT * FROM srs_items WHERE next_review <= ? AND suspended = 0 ORDER BY next_review", (today,)
+            ).fetchall()
     return [dict(r) for r in rows]
+
+
+def suspend_srs_item(word: str, suspended: bool = True) -> None:
+    with get_conn() as conn:
+        conn.execute("UPDATE srs_items SET suspended = ? WHERE word = ?", (1 if suspended else 0, word))
+        conn.commit()
 
 
 # Anki-style 4 buttons: Again=0 / Hard=1 / Good=2 / Easy=3
@@ -288,12 +304,13 @@ def update_srs_item(word: str, score: int):
 def get_srs_stats() -> dict:
     today = date.today().isoformat()
     with get_conn() as conn:
-        total = conn.execute("SELECT COUNT(*) FROM srs_items").fetchone()[0]
+        total = conn.execute("SELECT COUNT(*) FROM srs_items WHERE suspended = 0").fetchone()[0]
         due_today = conn.execute(
-            "SELECT COUNT(*) FROM srs_items WHERE next_review <= ?", (today,)
+            "SELECT COUNT(*) FROM srs_items WHERE next_review <= ? AND suspended = 0", (today,)
         ).fetchone()[0]
-        learned = conn.execute("SELECT COUNT(*) FROM srs_items WHERE reps >= 3").fetchone()[0]
-    return {"total": total, "due_today": due_today, "learned": learned}
+        learned = conn.execute("SELECT COUNT(*) FROM srs_items WHERE reps >= 3 AND suspended = 0").fetchone()[0]
+        suspended = conn.execute("SELECT COUNT(*) FROM srs_items WHERE suspended = 1").fetchone()[0]
+    return {"total": total, "due_today": due_today, "learned": learned, "suspended": suspended}
 
 
 # ── Topic progress ────────────────────────────────────────────────────────────
