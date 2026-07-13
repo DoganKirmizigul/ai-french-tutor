@@ -112,7 +112,7 @@ export default function SohbetPage() {
             onClick={() => openSession(s.id)}
             className={`group flex w-full items-start gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition ${
               activeId === s.id
-                ? "bg-violet-700/10 text-violet-700 dark:text-violet-400"
+                ? "bg-slate-700/10 text-slate-700 dark:text-slate-400"
                 : "hover:bg-muted"
             }`}
           >
@@ -179,7 +179,7 @@ export default function SohbetPage() {
                 <button
                   key={s}
                   onClick={() => send(s)}
-                  className="card w-full p-3.5 text-left text-sm transition hover:border-violet-600/40 hover:shadow-md"
+                  className="card w-full p-3.5 text-left text-sm transition hover:border-slate-600/40 hover:shadow-md"
                 >
                   {s}
                 </button>
@@ -209,7 +209,7 @@ export default function SohbetPage() {
 
           {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="h-3 w-3 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-slate-700 border-t-transparent" />
               Teacher is typing…
             </div>
           )}

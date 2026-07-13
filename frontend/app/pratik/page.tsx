@@ -85,7 +85,7 @@ export default function PratikPage() {
       )}
 
       {exercises.length === 0 && !loading && (
-        <div className="card p-5 border-l-4 border-l-violet-600">
+        <div className="card p-5 border-l-4 border-l-slate-600">
           <p className="text-sm text-muted-foreground">
             <strong className="text-foreground font-semibold">How it works —</strong>{" "}
             The AI analyses your error log and generates personalised questions focused on your
@@ -106,7 +106,7 @@ export default function PratikPage() {
             {/* Question header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-700/10 text-[11px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-400">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-700/10 text-[11px] font-bold text-slate-700 dark:bg-slate-400/15 dark:text-slate-400">
                   {i + 1}
                 </span>
                 <span className="eyebrow">{ex.type} · {ex.topic}</span>
@@ -133,7 +133,7 @@ export default function PratikPage() {
                       checked={answers[i] === opt}
                       onChange={() => setAnswers((a) => a.map((v, j) => (j === i ? opt : v)))}
                       disabled={!!result}
-                      className="accent-violet-700"
+                      className="accent-slate-700"
                     />
                     {opt}
                   </label>

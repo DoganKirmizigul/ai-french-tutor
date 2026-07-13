@@ -43,7 +43,7 @@ export default function Dashboard() {
 
   if (!data) return (
     <div className="flex items-center gap-3 py-16 text-muted-foreground">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-700 border-t-transparent" />
       <span className="text-sm font-medium">Loading your progress…</span>
     </div>
   );
@@ -66,8 +66,8 @@ export default function Dashboard() {
         <div className="card relative overflow-hidden p-6 md:col-span-2">
           <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full"
             style={{ background: "radial-gradient(circle, hsl(273 72% 47% / 0.08), transparent 70%)" }} />
-          <div className="pointer-events-none absolute right-[50px] top-[50px] h-20 w-20 rounded-full border border-violet-500/15" />
-          <div className="pointer-events-none absolute right-[70px] top-[70px] h-[42px] w-[42px] rounded-full border border-violet-500/25" />
+          <div className="pointer-events-none absolute right-[50px] top-[50px] h-20 w-20 rounded-full border border-slate-400/15" />
+          <div className="pointer-events-none absolute right-[70px] top-[70px] h-[42px] w-[42px] rounded-full border border-slate-400/25" />
 
           <p className="eyebrow">Welcome back · {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</p>
           <h1 className="mt-2 text-[32px] font-black tracking-tight leading-tight">
@@ -78,7 +78,7 @@ export default function Dashboard() {
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-700 px-3.5 py-1.5 text-[10.5px] font-bold uppercase tracking-wide text-white shadow-sm shadow-violet-700/30">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3.5 py-1.5 text-[10.5px] font-bold uppercase tracking-wide text-white shadow-sm shadow-slate-700/30">
               ★ Level {profile.level}
             </span>
             <span className="inline-flex items-center rounded-full bg-black/[0.05] px-3.5 py-1.5 text-[10.5px] font-semibold text-foreground/70 dark:bg-white/[0.07]">
@@ -153,7 +153,7 @@ export default function Dashboard() {
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
             <p className="eyebrow">Accuracy over time</p>
-            <span className="text-[11px] font-semibold text-violet-700 dark:text-violet-400">
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-400">
               Last {sessions.length} sessions
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function Dashboard() {
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
             <p className="eyebrow">Needs work</p>
-            <Link href="/konular" className="text-[11px] font-semibold text-violet-700 hover:underline dark:text-violet-400">
+            <Link href="/konular" className="text-[11px] font-semibold text-slate-700 hover:underline dark:text-slate-400">
               Study →
             </Link>
           </div>
@@ -231,7 +231,7 @@ export default function Dashboard() {
         <div className="card p-5">
           <div className="mb-4 flex items-center justify-between">
             <p className="eyebrow">Achievements</p>
-            <span className="rounded-full bg-violet-700/10 px-2.5 py-0.5 text-[10.5px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-400">
+            <span className="rounded-full bg-slate-700/10 px-2.5 py-0.5 text-[10.5px] font-bold text-slate-700 dark:bg-slate-400/15 dark:text-slate-400">
               {earnedBadges.length} / {badges.length}
             </span>
           </div>
@@ -245,7 +245,7 @@ export default function Dashboard() {
                   className={cn(
                     "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[10.5px] font-semibold",
                     b.earned
-                      ? "bg-violet-700 text-white shadow-sm shadow-violet-700/25"
+                      ? "bg-slate-700 text-white shadow-sm shadow-slate-700/25"
                       : "bg-muted text-muted-foreground"
                   )}
                 >
@@ -262,7 +262,7 @@ export default function Dashboard() {
         <div className="card p-5">
           <div className="mb-3 flex items-center justify-between">
             <p className="eyebrow">Flashcard mastery</p>
-            <span className="text-[11px] font-bold text-violet-700 dark:text-violet-400">{srsProgress}%</span>
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-400">{srsProgress}%</span>
           </div>
 
           <div className="progress-track mb-4">

@@ -46,7 +46,7 @@ export default function PlacementPage() {
 
   if (loading) return (
     <div className="flex items-center gap-3 py-16 text-muted-foreground">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-slate-700 border-t-transparent" />
       <span className="text-sm font-medium">Preparing your placement test…</span>
     </div>
   );
@@ -87,7 +87,7 @@ export default function PlacementPage() {
         <div key={q.id} className="card p-5 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-700/10 text-[11px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-400">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-700/10 text-[11px] font-bold text-slate-700 dark:bg-slate-400/15 dark:text-slate-400">
                 {i + 1}
               </span>
               <span className="eyebrow">{q.level} · {q.topic}</span>
@@ -110,7 +110,7 @@ export default function PlacementPage() {
                   name={`q${q.id}`}
                   checked={answers[i] === opt}
                   onChange={() => setAnswers((a) => a.map((v, j) => (j === i ? opt : v)))}
-                  className="accent-violet-700"
+                  className="accent-slate-700"
                 />
                 {opt}
               </label>

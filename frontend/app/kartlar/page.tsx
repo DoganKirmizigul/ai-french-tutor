@@ -137,7 +137,7 @@ export default function KartlarPage() {
               onClick={() => setPanel(p)}
               className={`flex-1 py-3 text-[12px] font-semibold transition ${
                 panel === p
-                  ? "border-b-2 border-violet-700 text-violet-700 dark:text-violet-400"
+                  ? "border-b-2 border-slate-700 text-slate-700 dark:text-slate-400"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -160,7 +160,7 @@ export default function KartlarPage() {
               <input
                 type="range" min={5} max={20} value={count}
                 onChange={(e) => setCount(+e.target.value)}
-                className="flex-1 accent-violet-700"
+                className="flex-1 accent-slate-700"
               />
               <span className="w-20 text-sm text-muted-foreground">{count} words</span>
               <button onClick={() => addAI(panel)} disabled={loading} className="btn-primary flex items-center gap-1.5 shrink-0">
@@ -178,15 +178,15 @@ export default function KartlarPage() {
           onClick={() => setAllMode((v) => !v)}
           className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition ${
             allMode
-              ? "bg-violet-700 text-white shadow-sm shadow-violet-700/30"
-              : "border border-border text-muted-foreground hover:border-violet-600/40 hover:text-foreground"
+              ? "bg-slate-700 text-white shadow-sm shadow-slate-700/30"
+              : "border border-border text-muted-foreground hover:border-slate-600/40 hover:text-foreground"
           }`}
         >
           {allMode ? "📚 All Cards" : "📅 Due Today"}
         </button>
         <button
           onClick={() => { setDirection((d) => (d === "fr-tr" ? "tr-fr" : "fr-tr")); setRevealed(false); }}
-          className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-violet-600/40 hover:text-foreground transition"
+          className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-slate-600/40 hover:text-foreground transition"
         >
           <ArrowLeftRight size={14} />
           {isFrFirst ? "FR → TR/EN" : "TR/EN → FR"}
@@ -245,7 +245,7 @@ export default function KartlarPage() {
                 {[
                   { emoji: "😵", label: "Again", cls: "bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60" },
                   { emoji: "😓", label: "Hard",  cls: "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60" },
-                  { emoji: "🙂", label: "Good",  cls: "bg-violet-700 text-white hover:bg-violet-800 shadow-sm shadow-violet-700/30" },
+                  { emoji: "🙂", label: "Good",  cls: "bg-slate-700 text-white hover:bg-slate-800 shadow-sm shadow-slate-700/30" },
                   { emoji: "😄", label: "Easy",  cls: "bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60" },
                 ].map((b, score) => (
                   <button

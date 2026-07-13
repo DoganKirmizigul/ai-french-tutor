@@ -76,7 +76,7 @@ export default function DicteePage() {
             type="checkbox"
             checked={slow}
             onChange={(e) => setSlow(e.target.checked)}
-            className="accent-violet-700"
+            className="accent-slate-700"
           />
           Slow
         </label>
@@ -91,7 +91,7 @@ export default function DicteePage() {
           {/* Listen again */}
           <button
             onClick={() => speak(sentence, slow)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium text-muted-foreground hover:border-violet-600/40 hover:text-foreground transition"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium text-muted-foreground hover:border-slate-600/40 hover:text-foreground transition"
           >
             <Volume2 size={16} /> Listen Again
           </button>

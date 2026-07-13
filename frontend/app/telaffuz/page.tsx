@@ -54,11 +54,11 @@ export default function TelaffuzPage() {
 
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="radio" checked={!slow} onChange={() => setSlow(false)} className="accent-violet-700" />
+            <input type="radio" checked={!slow} onChange={() => setSlow(false)} className="accent-slate-700" />
             Normal speed
           </label>
           <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="radio" checked={slow} onChange={() => setSlow(true)} className="accent-violet-700" />
+            <input type="radio" checked={slow} onChange={() => setSlow(true)} className="accent-slate-700" />
             Slow speed
           </label>
         </div>
@@ -83,9 +83,9 @@ export default function TelaffuzPage() {
             <button
               key={title}
               onClick={() => { setText(sentence); play(sentence); }}
-              className="card p-4 text-left transition hover:border-violet-600/40 hover:shadow-md group"
+              className="card p-4 text-left transition hover:border-slate-600/40 hover:shadow-md group"
             >
-              <div className="font-semibold text-sm group-hover:text-violet-700 dark:group-hover:text-violet-400 transition">
+              <div className="font-semibold text-sm group-hover:text-slate-700 dark:group-hover:text-slate-400 transition">
                 {title}
               </div>
               <div className="mt-1 text-xs text-muted-foreground line-clamp-2">{sentence}</div>

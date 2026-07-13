@@ -234,7 +234,7 @@ export default function KonularPage() {
           onClick={() => loadEntry(h)}
           className={`group flex w-full items-start gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition ${
             topic === h.topic && level === h.level && explanation
-              ? "bg-violet-700/10 text-violet-700 dark:text-violet-400"
+              ? "bg-slate-700/10 text-slate-700 dark:text-slate-400"
               : "hover:bg-muted"
           }`}
         >
@@ -306,20 +306,22 @@ export default function KonularPage() {
             onSubmit={(e) => { e.preventDefault(); if (input.trim()) explain(input.trim()); }}
             className="space-y-3"
           >
-            <select value={level} onChange={(e) => setLevel(e.target.value)} className="input w-full">
-              {LEVELS.map((l) => <option key={l}>{l}</option>)}
-            </select>
-            <input
-              className="input w-full"
-              placeholder="e.g. aller verb, passé composé, conjunctions…"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <input
+                className="input flex-1 min-w-0"
+                placeholder="e.g. aller verb, passé composé, conjunctions…"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              />
+              <select value={level} onChange={(e) => setLevel(e.target.value)} className="input !w-[72px] shrink-0 text-sm">
+                {LEVELS.map((l) => <option key={l}>{l}</option>)}
+              </select>
+            </div>
             <button
               type="button"
               onClick={suggest}
               disabled={!!loading}
-              className="w-full flex items-center justify-center gap-2 rounded-[12px] border border-border py-2.5 text-sm font-medium text-muted-foreground transition hover:border-violet-600/40 hover:text-violet-700 dark:hover:text-violet-400"
+              className="w-full flex items-center justify-center gap-2 rounded-[12px] border border-border py-2.5 text-sm font-medium text-muted-foreground transition hover:border-slate-600/40 hover:text-slate-700 dark:hover:text-slate-400"
             >
               <Sparkles size={15} />
               {loading === "suggest" ? "AI thinking…" : "Suggest a topic with AI"}
@@ -336,7 +338,7 @@ export default function KonularPage() {
 
         {loading === "explain" && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-700 border-t-transparent" />
             Preparing &quot;{topic}&quot;…
           </div>
         )}
@@ -366,13 +368,13 @@ export default function KonularPage() {
               </div>
 
               {explanation.formula && (
-                <code className="block rounded-xl bg-violet-50 dark:bg-violet-950/30 border border-violet-200/60 dark:border-violet-800/40 px-4 py-3 text-sm font-mono text-violet-800 dark:text-violet-300">
+                <code className="block rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-700/40 px-4 py-3 text-sm font-mono text-slate-800 dark:text-slate-300">
                   {explanation.formula}
                 </code>
               )}
 
               {explanation.sub_rules?.map((sr) => (
-                <div key={sr.title} className="border-l-[3px] border-violet-600 pl-4 space-y-1">
+                <div key={sr.title} className="border-l-[3px] border-slate-600 pl-4 space-y-1">
                   <p className="font-semibold text-sm">{sr.title}</p>
                   <p className="text-sm text-muted-foreground">{sr.explanation}</p>
                   {sr.example_fr && (
@@ -389,7 +391,7 @@ export default function KonularPage() {
                 <div className="space-y-2">
                   <p className="eyebrow">Examples</p>
                   {explanation.examples.map((ex, i) => (
-                    <div key={i} className="rounded-xl bg-violet-50 dark:bg-violet-950/20 border border-violet-200/50 dark:border-violet-800/30 px-4 py-3 text-sm">
+                    <div key={i} className="rounded-xl bg-slate-50 dark:bg-slate-900/20 border border-slate-200/50 dark:border-slate-700/30 px-4 py-3 text-sm">
                       <strong>{ex.fr}</strong>
                       {ex.note && <em className="text-muted-foreground"> · {ex.note}</em>}
                       <br />
@@ -447,7 +449,7 @@ export default function KonularPage() {
                               type="radio" name={`kq${q.id}`}
                               checked={answers[i] === opt}
                               onChange={() => setAnswers((a) => a.map((v, j) => (j === i ? opt : v)))}
-                              className="accent-violet-700"
+                              className="accent-slate-700"
                             />
                             {opt}
                           </label>
@@ -497,7 +499,7 @@ export default function KonularPage() {
                 ))}
 
                 {result.advice && (
-                  <div className="card p-4 text-sm border-violet-300 dark:border-violet-800 bg-violet-50/50 dark:bg-violet-950/20">
+                  <div className="card p-4 text-sm border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/20">
                     🎯 <strong>Next Step:</strong> {result.advice}
                   </div>
                 )}

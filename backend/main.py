@@ -9,7 +9,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from routers import chat, dictee, exercises, profile, srs, topics, tts
+from routers import chat, dictee, exercises, profile, srs, topics, translate, tts
 
 APP_SECRET = os.getenv("APP_SECRET", "")
 CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")]
@@ -49,3 +49,4 @@ app.include_router(srs.router,       prefix="/api/srs",       tags=["srs"])
 app.include_router(dictee.router,    prefix="/api/dictee",    tags=["dictee"])
 app.include_router(chat.router,      prefix="/api/chat",      tags=["chat"])
 app.include_router(tts.router,       prefix="/api/tts",       tags=["tts"])
+app.include_router(translate.router, prefix="/api/translate", tags=["translate"])
