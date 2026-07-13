@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
-MYMEMORY_KEY = os.getenv("MYMEMORY_KEY", "")
+MYMEMORY_EMAIL = os.getenv("MYMEMORY_KEY", "")  # email for 10k/day limit
 
 
 class TranslateReq(BaseModel):
@@ -24,8 +24,8 @@ async def translate(req: TranslateReq):
 
     langpair = f"{req.source}|{req.target}"
     params: dict = {"q": text, "langpair": langpair}
-    if MYMEMORY_KEY:
-        params["key"] = MYMEMORY_KEY
+    if MYMEMORY_EMAIL:
+        params["de"] = MYMEMORY_EMAIL
 
     async with httpx.AsyncClient(timeout=10) as client:
         try:
