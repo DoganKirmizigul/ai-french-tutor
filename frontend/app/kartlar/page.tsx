@@ -84,16 +84,6 @@ export default function KartlarPage() {
     }
   }
 
-  function toggleAllMode() {
-    const next = !allMode;
-    setAllMode(next);
-  }
-
-  function toggleDirection() {
-    setDirection((d) => (d === "fr-tr" ? "tr-fr" : "fr-tr"));
-    setRevealed(false);
-  }
-
   const item = due[idx];
   const ease = item?.ease ?? 2.5;
   const inter = item?.interval ?? 1;
@@ -112,69 +102,91 @@ export default function KartlarPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">🃏 Flashcards</h1>
 
+      {/* Header */}
+      <div>
+        <p className="eyebrow">Spaced Repetition · SRS</p>
+        <h1 className="page-title">Flashcards</h1>
+        <p className="page-sub">Lock words into long-term memory with scientifically-spaced review.</p>
+      </div>
+
+      {/* Stats mini bar */}
       {stats && (
-        <div className="grid grid-cols-4 gap-3">
-          <div className="card text-center"><div className="text-2xl font-bold">{due.length}</div><div className="text-xs text-slate-500">Due</div></div>
-          <div className="card text-center"><div className="text-2xl font-bold">{stats.total}</div><div className="text-xs text-slate-500">Total</div></div>
-          <div className="card text-center"><div className="text-2xl font-bold">{stats.learned}</div><div className="text-xs text-slate-500">Learned</div></div>
-          <div className="card text-center"><div className="text-2xl font-bold text-slate-400">{stats.suspended}</div><div className="text-xs text-slate-500">Suspended</div></div>
+        <div className="stats-mini">
+          {[
+            { label: "Due", value: due.length, color: "text-amber-600 dark:text-amber-400" },
+            { label: "Total", value: stats.total, color: "" },
+            { label: "Learned", value: stats.learned, color: "text-green-600 dark:text-green-400" },
+            { label: "Suspended", value: stats.suspended, color: "text-muted-foreground" },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="stats-mini-cell">
+              <div className={`stats-mini-num ${color}`}>{value}</div>
+              <div className="stats-mini-lbl">{label}</div>
+            </div>
+          ))}
         </div>
       )}
 
       {/* Add words panel */}
-      <div className="card space-y-3">
-        <div className="flex gap-2">
+      <div className="card overflow-hidden">
+        {/* Panel tabs */}
+        <div className="flex border-b border-border">
           {(["manual", "progress", "frequency"] as Panel[]).map((p) => (
             <button
               key={p}
               onClick={() => setPanel(p)}
-              className={`rounded-xl px-3 py-1.5 text-sm font-medium ${panel === p ? "grad text-white" : "bg-slate-100 dark:bg-slate-800"}`}
+              className={`flex-1 py-3 text-[12px] font-semibold transition ${
+                panel === p
+                  ? "border-b-2 border-violet-700 text-violet-700 dark:text-violet-400"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              {p === "manual" ? "✍️ Manual" : p === "progress" ? "🤖 Progress-Based" : "📊 Most Frequent"}
+              {p === "manual" ? "✍️ Manual" : p === "progress" ? "🤖 AI Progress" : "📊 Frequent"}
             </button>
           ))}
         </div>
-
-        {panel === "manual" ? (
-          <div className="grid gap-2 md:grid-cols-4">
-            <input className="input" placeholder="le chat" value={word} onChange={(e) => setWord(e.target.value)} />
-            <input className="input" placeholder="cat" value={meaning} onChange={(e) => setMeaning(e.target.value)} />
-            <input className="input" placeholder="Le chat dort. (optional)" value={example} onChange={(e) => setExample(e.target.value)} />
-            <button onClick={addManual} className="btn-primary flex items-center justify-center gap-1">
-              <Plus size={16} /> Add
-            </button>
-          </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            <input
-              type="range" min={5} max={20} value={count}
-              onChange={(e) => setCount(+e.target.value)}
-              className="flex-1 accent-indigo-500"
-            />
-            <span className="w-20 text-sm">{count} words</span>
-            <button onClick={() => addAI(panel)} disabled={loading} className="btn-primary flex items-center gap-1">
-              <Sparkles size={16} /> {loading ? "Adding…" : "Add with AI"}
-            </button>
-          </div>
-        )}
-        {msg && <p className="text-sm text-slate-500">{msg}</p>}
+        <div className="p-4 space-y-3">
+          {panel === "manual" ? (
+            <div className="grid gap-2 md:grid-cols-4">
+              <input className="input" placeholder="le chat" value={word} onChange={(e) => setWord(e.target.value)} />
+              <input className="input" placeholder="cat" value={meaning} onChange={(e) => setMeaning(e.target.value)} />
+              <input className="input" placeholder="Le chat dort. (optional)" value={example} onChange={(e) => setExample(e.target.value)} />
+              <button onClick={addManual} className="btn-primary flex items-center justify-center gap-1.5">
+                <Plus size={15} /> Add
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <input
+                type="range" min={5} max={20} value={count}
+                onChange={(e) => setCount(+e.target.value)}
+                className="flex-1 accent-violet-700"
+              />
+              <span className="w-20 text-sm text-muted-foreground">{count} words</span>
+              <button onClick={() => addAI(panel)} disabled={loading} className="btn-primary flex items-center gap-1.5 shrink-0">
+                <Sparkles size={15} /> {loading ? "Adding…" : "Add with AI"}
+              </button>
+            </div>
+          )}
+          {msg && <p className="text-sm text-muted-foreground">{msg}</p>}
+        </div>
       </div>
 
       {/* Review controls */}
       <div className="flex gap-2">
         <button
-          onClick={toggleAllMode}
-          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition ${
-            allMode ? "grad text-white" : "bg-slate-100 dark:bg-slate-800"
+          onClick={() => setAllMode((v) => !v)}
+          className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition ${
+            allMode
+              ? "bg-violet-700 text-white shadow-sm shadow-violet-700/30"
+              : "border border-border text-muted-foreground hover:border-violet-600/40 hover:text-foreground"
           }`}
         >
           {allMode ? "📚 All Cards" : "📅 Due Today"}
         </button>
         <button
-          onClick={toggleDirection}
-          className="flex items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 text-sm font-medium transition dark:bg-slate-800"
+          onClick={() => { setDirection((d) => (d === "fr-tr" ? "tr-fr" : "fr-tr")); setRevealed(false); }}
+          className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-violet-600/40 hover:text-foreground transition"
         >
           <ArrowLeftRight size={14} />
           {isFrFirst ? "FR → TR/EN" : "TR/EN → FR"}
@@ -183,55 +195,58 @@ export default function KartlarPage() {
 
       {/* Card review */}
       {!item ? (
-        <div className="card text-center text-slate-500">
+        <div className="card p-8 text-center text-muted-foreground text-sm">
           {allMode ? "No cards yet — add some above!" : 'All done for today! Switch to "All Cards" to keep going.'}
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-            <div className="grad h-full transition-all" style={{ width: `${(idx / due.length) * 100}%` }} />
+          {/* Progress bar */}
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${(idx / due.length) * 100}%` }} />
           </div>
-          <p className="text-center text-xs text-slate-400">Card {idx + 1} / {due.length}</p>
+          <p className="text-center text-xs text-muted-foreground">Card {idx + 1} / {due.length}</p>
 
-          {/* Front */}
-          <div className="card py-10 text-center">
-            <div className="mb-2 text-xs text-slate-400">{isFrFirst ? "🇫🇷" : "🌐"} {frontLabel}</div>
-            <div className="text-4xl font-bold tracking-wide">{front}</div>
+          {/* Front face */}
+          <div className="card p-8 text-center space-y-4">
+            <p className="eyebrow">{isFrFirst ? "🇫🇷" : "🌐"} {frontLabel}</p>
+            <div className="text-4xl font-black tracking-tight">{front}</div>
             {isFrFirst && (
               <button
                 onClick={() => speak(item.word)}
-                className="btn-ghost mx-auto mt-4 flex items-center gap-2 text-sm"
+                className="mx-auto flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition"
               >
-                <Volume2 size={16} /> Listen
+                <Volume2 size={15} /> Listen
               </button>
             )}
           </div>
 
           {!revealed ? (
-            <button onClick={() => setRevealed(true)} className="btn-primary flex w-full items-center justify-center gap-2">
-              <Eye size={18} /> Reveal Answer
+            <button onClick={() => setRevealed(true)} className="btn-primary w-full flex items-center justify-center gap-2">
+              <Eye size={16} /> Reveal Answer
             </button>
           ) : (
             <>
-              {/* Back */}
-              <div className="card border-green-300 py-6 text-center dark:border-green-800">
-                <div className="mb-1 text-xs text-slate-400">{isFrFirst ? "🌐" : "🇫🇷"} {backLabel}</div>
-                <div className="text-2xl font-semibold">{back}</div>
-                {item.example && <div className="mt-2 text-sm italic text-slate-500">{item.example}</div>}
+              {/* Back face */}
+              <div className="card p-6 text-center space-y-2 border-green-400 dark:border-green-700">
+                <p className="eyebrow">{isFrFirst ? "🌐" : "🇫🇷"} {backLabel}</p>
+                <div className="text-2xl font-bold">{back}</div>
+                {item.example && <p className="text-sm italic text-muted-foreground">{item.example}</p>}
                 {!isFrFirst && (
-                  <button onClick={() => speak(item.word)} className="btn-ghost mx-auto mt-3 flex items-center gap-2 text-sm">
-                    <Volume2 size={16} /> Listen
+                  <button onClick={() => speak(item.word)} className="mx-auto flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition">
+                    <Volume2 size={15} /> Listen
                   </button>
                 )}
               </div>
 
-              <p className="text-center text-xs text-slate-400">How well did you remember?</p>
+              <p className="text-center text-xs text-muted-foreground">How well did you remember?</p>
+
+              {/* SRS rating buttons */}
               <div className="grid grid-cols-4 gap-2">
                 {[
-                  { emoji: "😵", label: "Again", cls: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300" },
-                  { emoji: "😓", label: "Hard",  cls: "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300" },
-                  { emoji: "🙂", label: "Good",  cls: "grad text-white" },
-                  { emoji: "😄", label: "Easy",  cls: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300" },
+                  { emoji: "😵", label: "Again", cls: "bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60" },
+                  { emoji: "😓", label: "Hard",  cls: "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60" },
+                  { emoji: "🙂", label: "Good",  cls: "bg-violet-700 text-white hover:bg-violet-800 shadow-sm shadow-violet-700/30" },
+                  { emoji: "😄", label: "Easy",  cls: "bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60" },
                 ].map((b, score) => (
                   <button
                     key={b.label}
@@ -239,14 +254,14 @@ export default function KartlarPage() {
                     className={`rounded-xl px-2 py-3 text-sm font-semibold transition active:scale-95 ${b.cls}`}
                   >
                     <div>{b.emoji} {b.label}</div>
-                    <div className="text-[10px] font-normal opacity-70">{nextInterval[score]}</div>
+                    <div className="text-[10px] font-normal opacity-70 mt-0.5">{nextInterval[score]}</div>
                   </button>
                 ))}
               </div>
 
               <button
                 onClick={suspend}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-2 text-xs text-slate-400 transition hover:border-red-300 hover:text-red-400 dark:border-slate-700"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-xs text-muted-foreground transition hover:border-red-400/50 hover:text-red-500"
               >
                 <EyeOff size={13} /> Never show this word again
               </button>

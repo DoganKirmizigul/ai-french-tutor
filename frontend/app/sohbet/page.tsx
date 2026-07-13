@@ -94,41 +94,37 @@ export default function SohbetPage() {
   }
 
   function formatDate(iso: string) {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
   }
 
   const SessionList = () => (
     <>
-      <button
-        onClick={newChat}
-        className="btn-primary flex items-center justify-center gap-2 text-sm"
-      >
-        <Plus size={15} /> New Chat
+      <button onClick={newChat} className="btn-primary w-full flex items-center justify-center gap-1.5 text-sm">
+        <Plus size={14} /> New Chat
       </button>
-      <div className="flex-1 overflow-y-auto space-y-1 mt-2">
+      <div className="flex-1 overflow-y-auto space-y-0.5 mt-2">
         {sessions.length === 0 && (
-          <p className="px-1 text-xs text-slate-400">No conversations yet</p>
+          <p className="px-2 py-2 text-xs text-muted-foreground">No conversations yet</p>
         )}
         {sessions.map((s) => (
           <button
             key={s.id}
             onClick={() => openSession(s.id)}
-            className={`group flex w-full items-start gap-2 rounded-xl px-3 py-2 text-left text-xs transition ${
+            className={`group flex w-full items-start gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition ${
               activeId === s.id
-                ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
-                : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                ? "bg-violet-700/10 text-violet-700 dark:text-violet-400"
+                : "hover:bg-muted"
             }`}
           >
-            <MessageSquare size={12} className="mt-0.5 shrink-0 opacity-50" />
+            <MessageSquare size={12} className="mt-0.5 shrink-0 opacity-40" />
             <span className="flex-1 min-w-0">
-              <span className="block truncate font-medium">{s.title}</span>
-              <span className="text-slate-400">{formatDate(s.updated)}</span>
+              <span className="block truncate font-semibold">{s.title}</span>
+              <span className="text-muted-foreground">{formatDate(s.updated)}</span>
             </span>
             <Trash2
               size={12}
               onClick={(e) => deleteSession(s.id, e)}
-              className="mt-0.5 shrink-0 opacity-0 group-hover:opacity-50 hover:!opacity-100 text-red-500"
+              className="mt-0.5 shrink-0 opacity-0 group-hover:opacity-40 hover:!opacity-100 text-red-500 transition"
             />
           </button>
         ))}
@@ -138,14 +134,17 @@ export default function SohbetPage() {
 
   return (
     <div className="flex h-[calc(100dvh-120px)] gap-4">
+
       {/* Mobile drawer */}
       {drawerOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
-          <div className="relative flex w-72 max-w-[85vw] flex-col gap-2 bg-white p-4 dark:bg-slate-900 shadow-xl">
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-semibold text-sm">Chat History</span>
-              <button onClick={() => setDrawerOpen(false)}><X size={18} /></button>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setDrawerOpen(false)} />
+          <div className="relative flex w-72 max-w-[85vw] flex-col gap-2 bg-background p-4 shadow-2xl border-r border-border">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-bold text-sm">Chat History</span>
+              <button onClick={() => setDrawerOpen(false)} className="text-muted-foreground hover:text-foreground">
+                <X size={18} />
+              </button>
             </div>
             <SessionList />
           </div>
@@ -160,34 +159,44 @@ export default function SohbetPage() {
       {/* Chat area */}
       <div className="flex flex-1 flex-col min-w-0">
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">💬 Ask Your Teacher</h1>
+          <div>
+            <p className="eyebrow">AI · Conversational</p>
+            <h1 className="text-xl font-black tracking-tight mt-0.5">Ask Your Teacher</h1>
+          </div>
           <button
             onClick={() => setDrawerOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm dark:border-slate-700 md:hidden"
+            className="flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition md:hidden"
           >
-            <History size={15} /> History
+            <History size={14} /> History
           </button>
         </div>
 
         <div className="flex-1 space-y-3 overflow-y-auto pb-4">
           {messages.length === 0 && (
             <div className="space-y-2">
-              <p className="text-sm text-slate-500">Ask anything about French:</p>
+              <p className="text-sm text-muted-foreground">Ask anything about French:</p>
               {QUICK_QUESTIONS.map((s) => (
                 <button
                   key={s}
                   onClick={() => send(s)}
-                  className="card block w-full text-left text-sm transition hover:border-indigo-300"
+                  className="card w-full p-3.5 text-left text-sm transition hover:border-violet-600/40 hover:shadow-md"
                 >
                   {s}
                 </button>
               ))}
             </div>
           )}
+
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
               {m.role === "user" ? (
-                <div className="grad max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm text-white">
+                <div
+                  className="max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm text-white"
+                  style={{
+                    background: "radial-gradient(ellipse at 25% 20%, rgba(255,255,255,0.18), transparent 55%), linear-gradient(148deg, hsl(273 66% 50%) 0%, hsl(273 72% 35%) 100%)",
+                    boxShadow: "0 4px 14px hsl(273 72% 38% / 0.35)",
+                  }}
+                >
                   {m.content}
                 </div>
               ) : (
@@ -197,13 +206,20 @@ export default function SohbetPage() {
               )}
             </div>
           ))}
-          {loading && <div className="animate-pulse text-sm text-slate-400">Teacher is typing…</div>}
+
+          {loading && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+              Teacher is typing…
+            </div>
+          )}
           <div ref={bottomRef} />
         </div>
 
+        {/* Input */}
         <form
           onSubmit={(e) => { e.preventDefault(); send(input); }}
-          className="flex gap-2 border-t border-slate-200 pt-3 dark:border-slate-800"
+          className="flex gap-2 border-t border-border pt-3"
         >
           <input
             className="input flex-1 min-w-0"
@@ -214,9 +230,9 @@ export default function SohbetPage() {
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="btn-primary flex items-center gap-1"
+            className="btn-primary flex items-center justify-center gap-1 shrink-0 px-4"
           >
-            <Send size={16} />
+            <Send size={15} />
           </button>
         </form>
       </div>

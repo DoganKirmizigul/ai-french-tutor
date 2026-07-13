@@ -2,41 +2,269 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Brand gradient ─────────────────────────────────────────────────────────── */
+/* ── Premium OKLCH palette as HSL-compatible CSS vars ────────────────── */
 :root {
-  --grad-from: #667eea;
-  --grad-to:   #764ba2;
+  /* amethyst ≈ oklch(47% 0.24 292) */
+  --am-600: 273 72% 47%;
+  --am-500: 273 66% 56%;
+  --am-400: 273 55% 65%;
+  --am-100: 273 30% 93%;
+  --am-50 : 273 25% 97%;
+
+  /* burnt amber ≈ oklch(56% 0.16 50) */
+  --ba-600: 33 68% 44%;
+  --ba-500: 36 68% 54%;
+
+  /* Neumorphic shadow (warm ivory ground) */
+  --neu: 7px 7px 18px rgba(185,155,80,0.22), -5px -5px 14px rgba(255,255,255,1.0);
+  --neu-sm: 4px 4px 11px rgba(185,155,80,0.18), -3px -3px 9px rgba(255,255,255,1.0);
 }
 
-.grad {
-  background-image: linear-gradient(135deg, var(--grad-from), var(--grad-to));
+.dark {
+  --neu: 7px 7px 20px rgba(0,0,0,0.70), -3px -3px 9px rgba(55,50,80,0.18);
+  --neu-sm: 4px 4px 12px rgba(0,0,0,0.60), -2px -2px 6px rgba(55,50,80,0.12);
 }
 
-.grad-text {
-  background-image: linear-gradient(135deg, var(--grad-from), var(--grad-to));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* ── shadcn CSS tokens ───────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 270 20% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 270 15% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 15% 10%;
+    --primary: 273 72% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 273 25% 96%;
+    --secondary-foreground: 273 20% 30%;
+    --muted: 273 15% 96%;
+    --muted-foreground: 273 10% 50%;
+    --accent: 273 20% 94%;
+    --accent-foreground: 273 20% 25%;
+    --destructive: 0 82% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 270 18% 88%;
+    --input: 270 18% 88%;
+    --ring: 273 72% 47%;
+    --radius: 0.875rem;
+  }
+
+  .dark {
+    --background: 270 20% 8%;
+    --foreground: 270 10% 97%;
+    --card: 270 18% 13%;
+    --card-foreground: 270 10% 97%;
+    --popover: 270 18% 13%;
+    --popover-foreground: 270 10% 97%;
+    --primary: 273 60% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 15% 18%;
+    --secondary-foreground: 270 10% 90%;
+    --muted: 270 15% 18%;
+    --muted-foreground: 270 10% 60%;
+    --accent: 270 15% 20%;
+    --accent-foreground: 270 10% 95%;
+    --destructive: 0 68% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 270 15% 22%;
+    --input: 270 15% 22%;
+    --ring: 270 60% 62%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
 }
 
-/* ── Legacy utility classes ─────────────────────────────────────────────────── */
+/* ── Premium typography utilities ────────────────────────────────────── */
+.eyebrow {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: hsl(var(--muted-foreground));
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-top: 6px;
+}
+
+.page-sub {
+  font-size: 13px;
+  line-height: 1.55;
+  color: hsl(var(--muted-foreground));
+  margin-top: 5px;
+}
+
+/* ── Premium card ─────────────────────────────────────────────────────── */
 .card {
-  @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900;
+  border-radius: var(--radius);
+  background: linear-gradient(148deg, hsl(0 0% 99.6%) 0%, hsl(40 18% 96.5%) 100%);
+  box-shadow: var(--neu);
+  border: 1px solid rgba(255,255,255,0.55);
+  position: relative;
+  overflow: hidden;
+}
+.dark .card {
+  background: linear-gradient(148deg, hsl(270 14% 18.5%) 0%, hsl(270 13% 14.5%) 100%);
+  border-color: hsl(270 15% 28% / 0.45);
 }
 
+/* ── Premium button ───────────────────────────────────────────────────── */
 .btn-primary {
-  @apply grad rounded-xl px-4 py-2.5 font-semibold text-white shadow-md transition hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  color: white;
+  border: none;
+  cursor: pointer;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.20), transparent 55%),
+    linear-gradient(148deg, hsl(273 66% 50%) 0%, hsl(273 72% 40%) 45%, hsl(273 72% 28%) 100%);
+  box-shadow:
+    0 5px 18px hsl(273 72% 38% / 0.48),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.18);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s, opacity 0.15s;
 }
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 24px hsl(273 72% 38% / 0.55),
+    inset 0 1px 0 rgba(255,255,255,0.26),
+    inset 0 -1px 0 rgba(0,0,0,0.18);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.45; pointer-events: none; transform: none; }
 
+/* ── Ghost / outline button ───────────────────────────────────────────── */
 .btn-ghost {
   @apply rounded-xl border border-slate-200 px-4 py-2.5 font-medium transition hover:bg-slate-100 active:scale-[0.98] disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800;
 }
 
+/* ── Premium input ────────────────────────────────────────────────────── */
 .input {
-  @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-indigo-900;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(0 0% 99.5%);
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: hsl(var(--foreground));
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 2px 2px 6px rgba(185,155,80,0.08);
+}
+.input:focus {
+  border-color: hsl(var(--primary) / 0.7);
+  box-shadow:
+    inset 2px 2px 6px rgba(185,155,80,0.08),
+    0 0 0 3px hsl(var(--primary) / 0.12);
+}
+.dark .input {
+  background: hsl(270 15% 16%);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.3);
+}
+.dark .input:focus {
+  box-shadow:
+    inset 2px 2px 6px rgba(0,0,0,0.3),
+    0 0 0 3px hsl(var(--primary) / 0.20);
 }
 
-/* ── Chat markdown ──────────────────────────────────────────────────────────── */
+/* ── Option / radio label ─────────────────────────────────────────────── */
+.opt-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1.5px solid hsl(var(--border));
+  padding: 12px 14px;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.opt-label:hover   { border-color: hsl(var(--primary) / 0.45); }
+.opt-label.selected {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.06);
+}
+
+/* ── Result / score card ──────────────────────────────────────────────── */
+.result-card {
+  border-radius: 18px;
+  color: white;
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.18), transparent 55%),
+    linear-gradient(148deg, hsl(273 66% 50%) 0%, hsl(273 72% 40%) 45%, hsl(273 72% 28%) 100%);
+  box-shadow: 0 8px 28px hsl(273 72% 38% / 0.45);
+  padding: 28px 24px;
+  text-align: center;
+}
+
+/* ── Amber accent card ────────────────────────────────────────────────── */
+.amber-card {
+  border-radius: 18px;
+  background: linear-gradient(148deg, hsl(40 80% 96%), hsl(36 60% 90%));
+  border: 1px solid hsl(36 60% 85%);
+}
+.dark .amber-card {
+  background: linear-gradient(148deg, hsl(36 30% 16%), hsl(36 25% 13%));
+  border-color: hsl(36 30% 22%);
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────── */
+.progress-track {
+  height: 8px;
+  border-radius: 99px;
+  background: hsl(var(--muted));
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, hsl(273 72% 44%), hsl(273 55% 62%));
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Stats mini grid ──────────────────────────────────────────────────── */
+.stats-mini {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.stats-mini-cell {
+  background: hsl(var(--muted) / 0.5);
+  border: 1px solid hsl(var(--border) / 0.6);
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.stats-mini-num {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.stats-mini-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: hsl(var(--muted-foreground));
+  margin-top: 2px;
+}
+
+/* ── Chat markdown ────────────────────────────────────────────────────── */
 .prose-chat p { @apply my-1.5; }
 .prose-chat p:first-child { @apply mt-0; }
 .prose-chat p:last-child  { @apply mb-0; }
@@ -45,68 +273,16 @@
 .prose-chat ul { @apply my-1.5 list-disc pl-5; }
 .prose-chat ol { @apply my-1.5 list-decimal pl-5; }
 .prose-chat li { @apply my-0.5; }
-.prose-chat h1, .prose-chat h2, .prose-chat h3, .prose-chat h4 { @apply mb-1 mt-2 font-bold; }
+.prose-chat h1, .prose-chat h2, .prose-chat h3 { @apply mb-1 mt-2 font-bold; }
 .prose-chat h1 { @apply text-base; }
-.prose-chat h2 { @apply text-base; }
+.prose-chat h2 { @apply text-sm; }
 .prose-chat h3 { @apply text-sm; }
 .prose-chat code { @apply rounded bg-slate-100 px-1 py-0.5 text-[13px] dark:bg-slate-800; }
 .prose-chat pre  { @apply my-2 overflow-x-auto rounded-xl bg-slate-100 p-3 dark:bg-slate-800; }
 .prose-chat pre code { @apply bg-transparent p-0; }
-.prose-chat blockquote { @apply my-1.5 border-l-2 border-indigo-300 pl-3 italic text-slate-500; }
+.prose-chat blockquote { @apply my-1.5 border-l-2 border-primary/40 pl-3 italic text-slate-500; }
 .prose-chat table { @apply my-2 w-full border-collapse text-xs; }
 .prose-chat th, .prose-chat td { @apply border border-slate-200 px-2 py-1 dark:border-slate-700; }
 .prose-chat th { @apply bg-slate-50 font-semibold dark:bg-slate-800; }
-.prose-chat a { @apply text-indigo-500 underline; }
+.prose-chat a { @apply text-primary underline; }
 .prose-chat hr { @apply my-2 border-slate-200 dark:border-slate-700; }
-
-/* ── shadcn CSS tokens ──────────────────────────────────────────────────────── */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
-    --primary: 250 70% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 250 30% 96%;
-    --secondary-foreground: 250 20% 30%;
-    --muted: 250 20% 96%;
-    --muted-foreground: 250 10% 50%;
-    --accent: 250 30% 94%;
-    --accent-foreground: 250 20% 25%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 250 15% 90%;
-    --input: 250 15% 90%;
-    --ring: 250 70% 60%;
-    --radius: 0.75rem;
-  }
-
-  .dark {
-    --background: 250 20% 8%;
-    --foreground: 250 10% 97%;
-    --card: 250 18% 13%;
-    --card-foreground: 250 10% 97%;
-    --popover: 250 18% 13%;
-    --popover-foreground: 250 10% 97%;
-    --primary: 250 65% 65%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 250 15% 18%;
-    --secondary-foreground: 250 10% 90%;
-    --muted: 250 15% 18%;
-    --muted-foreground: 250 10% 60%;
-    --accent: 250 15% 20%;
-    --accent-foreground: 250 10% 95%;
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 250 15% 22%;
-    --input: 250 15% 22%;
-    --ring: 250 65% 65%;
-  }
-
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
-}

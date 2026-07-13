@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { api, Exercise, ExerciseResult } from "@/lib/api";
-import { Dices, Send } from "lucide-react";
+import { CheckCircle2, Dices, Send, XCircle } from "lucide-react";
 
 interface CheckResponse {
   results: ExerciseResult[];
@@ -49,50 +49,91 @@ export default function PratikPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">✏️ Practice Exercises</h1>
 
-      <div className="flex gap-3">
-        <button onClick={generate} disabled={loading} className="btn-primary flex flex-1 items-center justify-center gap-2">
-          <Dices size={18} /> {loading && exercises.length === 0 ? "Preparing…" : "Generate New Exercises"}
-        </button>
-        <select value={count} onChange={(e) => setCount(+e.target.value)} className="input w-28">
-          {[3, 5, 7].map((n) => (
-            <option key={n} value={n}>{n} questions</option>
-          ))}
-        </select>
+      {/* Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="eyebrow">AI · Personalized</p>
+          <h1 className="page-title">Practice Exercises</h1>
+          <p className="page-sub">Questions tailored to your weak spots, generated fresh each time.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={count}
+            onChange={(e) => setCount(+e.target.value)}
+            className="input !w-36"
+          >
+            {[3, 5, 7].map((n) => (
+              <option key={n} value={n}>{n} questions</option>
+            ))}
+          </select>
+          <button
+            onClick={generate}
+            disabled={loading}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Dices size={16} />
+            {loading && exercises.length === 0 ? "Preparing…" : "Generate"}
+          </button>
+        </div>
       </div>
 
-      {error && <div className="card border-red-300 text-sm text-red-600">{error}</div>}
+      {error && (
+        <div className="card p-4 text-sm text-red-600 border-red-200 dark:border-red-900/50 dark:text-red-400">
+          {error}
+        </div>
+      )}
 
       {exercises.length === 0 && !loading && (
-        <div className="card border-l-4 border-l-indigo-500 text-sm text-slate-600 dark:text-slate-300">
-          <strong>How it works:</strong> The AI analyzes your error log and generates personalized questions
-          focused on your weak topics. Submit your answers to receive detailed feedback.
+        <div className="card p-5 border-l-4 border-l-violet-600">
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground font-semibold">How it works —</strong>{" "}
+            The AI analyses your error log and generates personalised questions focused on your
+            weak topics. Submit your answers for detailed feedback.
+          </p>
         </div>
       )}
 
       {exercises.map((ex, i) => {
         const res = result?.results.find((r) => r.id === ex.id);
         return (
-          <div key={ex.id} className={`card ${res ? (res.correct ? "border-green-400" : "border-red-400") : ""}`}>
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
-                {i + 1}. {ex.type} · {ex.topic}
-              </span>
-              {res && <span>{res.correct ? "✅" : "❌"}</span>}
+          <div
+            key={ex.id}
+            className={`card p-5 space-y-4 ${
+              res ? (res.correct ? "border-green-400 dark:border-green-700" : "border-red-400 dark:border-red-700") : ""
+            }`}
+          >
+            {/* Question header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-700/10 text-[11px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-400">
+                  {i + 1}
+                </span>
+                <span className="eyebrow">{ex.type} · {ex.topic}</span>
+              </div>
+              {res && (
+                res.correct
+                  ? <CheckCircle2 size={18} className="text-green-500" />
+                  : <XCircle size={18} className="text-red-500" />
+              )}
             </div>
-            <p className="mb-3 font-medium">{ex.question}</p>
+
+            <p className="font-semibold text-[15px] leading-snug">{ex.question}</p>
 
             {ex.options ? (
               <div className="space-y-2">
                 {ex.options.map((opt) => (
-                  <label key={opt} className="flex cursor-pointer items-center gap-2 text-sm">
+                  <label
+                    key={opt}
+                    className={`opt-label ${answers[i] === opt ? "selected" : ""}`}
+                  >
                     <input
                       type="radio"
                       name={`q${ex.id}`}
                       checked={answers[i] === opt}
                       onChange={() => setAnswers((a) => a.map((v, j) => (j === i ? opt : v)))}
                       disabled={!!result}
+                      className="accent-violet-700"
                     />
                     {opt}
                   </label>
@@ -108,16 +149,19 @@ export default function PratikPage() {
               />
             )}
 
-            {ex.hint && !result && <p className="mt-2 text-xs text-slate-400">💡 {ex.hint}</p>}
+            {ex.hint && !result && (
+              <p className="text-xs text-muted-foreground">💡 {ex.hint}</p>
+            )}
 
             {res && (
-              <div className={`mt-3 rounded-xl p-3 text-sm ${res.correct ? "bg-green-50 dark:bg-green-950" : "bg-red-50 dark:bg-red-950"}`}>
+              <div className={`rounded-xl p-3.5 text-sm ${res.correct ? "bg-green-50 dark:bg-green-950/40" : "bg-red-50 dark:bg-red-950/30"}`}>
                 {!res.correct && (
-                  <p className="mb-1">
-                    <strong>Correct answer:</strong> {res.correct_answer}
+                  <p className="mb-1 font-semibold">
+                    Correct answer:{" "}
+                    <span className="text-green-600 dark:text-green-400">{res.correct_answer}</span>
                   </p>
                 )}
-                {res.feedback}
+                <p className="text-muted-foreground">{res.feedback}</p>
               </div>
             )}
           </div>
@@ -125,21 +169,28 @@ export default function PratikPage() {
       })}
 
       {exercises.length > 0 && !result && (
-        <button onClick={check} disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2">
-          <Send size={18} /> {loading ? "Evaluating…" : "Submit Answers"}
+        <button
+          onClick={check}
+          disabled={loading}
+          className="btn-primary w-full flex items-center justify-center gap-2"
+        >
+          <Send size={16} />
+          {loading ? "Evaluating…" : "Submit Answers"}
         </button>
       )}
 
       {result && (
-        <div className="card grad text-center text-white">
-          <div className="text-3xl font-bold">
-            {result.correct}/{result.total}
-          </div>
-          <p className="text-sm opacity-90">correct answers</p>
+        <div className="result-card space-y-3">
+          <div className="text-5xl font-black tracking-tight">{result.correct}/{result.total}</div>
+          <p className="text-sm opacity-80">correct answers</p>
           {result.new_badges.length > 0 && (
-            <p className="mt-2 text-sm">🎉 New badge: {result.new_badges.join(", ")}</p>
+            <p className="text-sm opacity-90">🎉 New badge: {result.new_badges.join(", ")}</p>
           )}
-          <button onClick={generate} className="mt-3 rounded-xl bg-white/20 px-4 py-2 text-sm font-semibold hover:bg-white/30">
+          <div className="h-px bg-white/20 my-2" />
+          <button
+            onClick={generate}
+            className="rounded-xl border border-white/30 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/15"
+          >
             Generate New Set
           </button>
         </div>

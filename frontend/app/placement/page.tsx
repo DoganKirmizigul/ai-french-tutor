@@ -44,52 +44,73 @@ export default function PlacementPage() {
     }
   }
 
-  if (loading) return <div className="animate-pulse text-slate-400">Preparing your placement test…</div>;
-  if (error) return <div className="card border-red-300 text-red-600">Error: {error}</div>;
+  if (loading) return (
+    <div className="flex items-center gap-3 py-16 text-muted-foreground">
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-violet-700 border-t-transparent" />
+      <span className="text-sm font-medium">Preparing your placement test…</span>
+    </div>
+  );
+
+  if (error) return (
+    <div className="card p-5 text-sm text-red-600 border-red-200 dark:border-red-900/50 dark:text-red-400">
+      Error: {error}
+    </div>
+  );
 
   const answered = answers.filter(Boolean).length;
+  const pct = Math.round((answered / Math.max(questions.length, 1)) * 100);
 
   return (
     <div className="space-y-6">
-      <div className="card grad text-white">
-        <h1 className="text-2xl font-bold">🎯 Placement Test</h1>
-        <p className="mt-1 text-sm opacity-90">
-          Answer these 10 questions so we can find your French level. Don&apos;t worry if you don&apos;t know some — just do your best!
-        </p>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/30">
-          <div
-            className="h-full rounded-full bg-white transition-all"
-            style={{ width: `${(answered / questions.length) * 100}%` }}
-          />
+
+      {/* Hero */}
+      <div className="result-card text-left space-y-4">
+        <div>
+          <p className="eyebrow" style={{ color: "rgba(255,255,255,0.65)" }}>Assessment · Level Detection</p>
+          <h1 className="text-2xl font-black tracking-tight mt-2" style={{ letterSpacing: "-0.04em" }}>
+            Placement Test
+          </h1>
+          <p className="text-sm mt-2 opacity-75">
+            Answer these {questions.length} questions so we can find your French level. Do your best!
+          </p>
         </div>
-        <p className="mt-1 text-xs opacity-75">{answered}/{questions.length} answered</p>
+        <div>
+          <div className="h-2 overflow-hidden rounded-full bg-white/20 mb-2">
+            <div className="h-full rounded-full bg-white transition-all duration-500" style={{ width: `${pct}%` }} />
+          </div>
+          <p className="text-xs opacity-60">{answered}/{questions.length} answered</p>
+        </div>
       </div>
 
+      {/* Questions */}
       {questions.map((q, i) => (
-        <div key={q.id} className="card space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
-              Question {i + 1} · {q.level} · {q.topic}
-            </span>
-            {answers[i] && <span className="text-green-500 text-xs font-medium">✓ Answered</span>}
+        <div key={q.id} className="card p-5 space-y-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-700/10 text-[11px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-400">
+                {i + 1}
+              </span>
+              <span className="eyebrow">{q.level} · {q.topic}</span>
+            </div>
+            {answers[i] && (
+              <span className="text-xs font-semibold text-green-600 dark:text-green-400">✓ Answered</span>
+            )}
           </div>
-          <p className="font-medium">{q.question}</p>
+
+          <p className="font-semibold text-[15px] leading-snug">{q.question}</p>
+
           <div className="space-y-2">
             {q.options.map((opt) => (
               <label
                 key={opt}
-                className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-sm transition ${
-                  answers[i] === opt
-                    ? "border-indigo-400 bg-indigo-50 dark:bg-indigo-950"
-                    : "border-slate-200 hover:border-indigo-200 dark:border-slate-700"
-                }`}
+                className={`opt-label ${answers[i] === opt ? "selected" : ""}`}
               >
                 <input
                   type="radio"
                   name={`q${q.id}`}
                   checked={answers[i] === opt}
                   onChange={() => setAnswers((a) => a.map((v, j) => (j === i ? opt : v)))}
-                  className="accent-indigo-500"
+                  className="accent-violet-700"
                 />
                 {opt}
               </label>
@@ -102,10 +123,14 @@ export default function PlacementPage() {
         <button
           onClick={submit}
           disabled={submitting || answered < questions.length}
-          className="btn-primary flex w-full items-center justify-center gap-2"
+          className="btn-primary w-full flex items-center justify-center gap-2"
         >
-          <Send size={18} />
-          {submitting ? "Evaluating…" : answered < questions.length ? `Answer all questions (${answered}/${questions.length})` : "Submit & Find My Level"}
+          <Send size={16} />
+          {submitting
+            ? "Evaluating…"
+            : answered < questions.length
+              ? `Answer all questions (${answered}/${questions.length})`
+              : "Submit & Find My Level"}
         </button>
       )}
     </div>
