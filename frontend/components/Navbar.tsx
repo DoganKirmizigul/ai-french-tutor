@@ -3,23 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BookOpen,
-  Headphones,
-  LayoutDashboard,
-  MessageCircle,
-  Pencil,
-  Volume2,
-  WalletCards,
+  BookOpen, Headphones, LayoutDashboard,
+  MessageCircle, Pencil, Volume2, WalletCards,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 const items = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pratik", label: "Practice", icon: Pencil },
-  { href: "/konular", label: "Topics", icon: BookOpen },
-  { href: "/kartlar", label: "Cards", icon: WalletCards },
-  { href: "/dictee", label: "Dictée", icon: Headphones },
-  { href: "/telaffuz", label: "Pronunciation", icon: Volume2 },
-  { href: "/sohbet", label: "Chat", icon: MessageCircle },
+  { href: "/",          label: "Dashboard",    icon: LayoutDashboard },
+  { href: "/pratik",    label: "Practice",     icon: Pencil },
+  { href: "/konular",   label: "Topics",       icon: BookOpen },
+  { href: "/kartlar",   label: "Cards",        icon: WalletCards },
+  { href: "/dictee",    label: "Dictée",       icon: Headphones },
+  { href: "/telaffuz",  label: "Pronunciation",icon: Volume2 },
+  { href: "/sohbet",    label: "Chat",         icon: MessageCircle },
 ];
 
 export default function Navbar() {
@@ -27,35 +24,39 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Desktop: top navbar */}
-      <header className="sticky top-0 z-40 hidden border-b border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 md:block">
+      {/* Desktop top nav */}
+      <header className="sticky top-0 z-40 hidden border-b bg-background/80 backdrop-blur-md md:block">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-1 px-4">
-          <Link href="/" className="mr-4 flex items-center gap-2 font-bold">
-            <span>🇫🇷</span>
-            <span className="grad-text">My French Teacher</span>
+          <Link href="/" className="mr-3 flex items-center gap-2 font-bold text-sm">
+            <span className="text-lg">🇫🇷</span>
+            <span className="grad-text font-semibold tracking-tight">My French Teacher</span>
           </Link>
-          {items.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
-                  active
-                    ? "grad text-white shadow-md"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-                }`}
-              >
-                <Icon size={16} />
-                {label}
-              </Link>
-            );
-          })}
+          <Separator orientation="vertical" className="mx-2 h-5" />
+          <nav className="flex items-center gap-0.5">
+            {items.map(({ href, label, icon: Icon }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all",
+                    active
+                      ? "grad text-white shadow-sm"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  )}
+                >
+                  <Icon size={15} />
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </header>
 
-      {/* Mobile: bottom tab bar */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 md:hidden">
+      {/* Mobile bottom tab bar */}
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 backdrop-blur-sm md:hidden">
         <div className="grid grid-cols-7">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href;
@@ -63,11 +64,12 @@ export default function Navbar() {
               <Link
                 key={href}
                 href={href}
-                className={`flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium ${
-                  active ? "text-indigo-500" : "text-slate-500 dark:text-slate-400"
-                }`}
+                className={cn(
+                  "flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
+                  active ? "text-primary" : "text-muted-foreground"
+                )}
               >
-                <Icon size={20} />
+                <Icon size={19} className={active ? "stroke-[2.5]" : "stroke-[1.8]"} />
                 {label}
               </Link>
             );

@@ -2,19 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Brand gradient ─────────────────────────────────────────────────────────── */
 :root {
   --grad-from: #667eea;
-  --grad-to: #764ba2;
-}
-
-body {
-  @apply bg-slate-50 text-slate-900 antialiased;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    @apply bg-slate-950 text-slate-100;
-  }
+  --grad-to:   #764ba2;
 }
 
 .grad {
@@ -28,6 +19,7 @@ body {
   color: transparent;
 }
 
+/* ── Legacy utility classes ─────────────────────────────────────────────────── */
 .card {
   @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900;
 }
@@ -37,17 +29,17 @@ body {
 }
 
 .btn-ghost {
-  @apply rounded-xl border border-slate-200 px-4 py-2.5 font-medium transition hover:bg-slate-100 active:scale-[0.98] dark:border-slate-700 dark:hover:bg-slate-800 disabled:opacity-40;
+  @apply rounded-xl border border-slate-200 px-4 py-2.5 font-medium transition hover:bg-slate-100 active:scale-[0.98] disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800;
 }
 
 .input {
   @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-indigo-900;
 }
 
-/* Sohbet mesajlarındaki markdown */
+/* ── Chat markdown ──────────────────────────────────────────────────────────── */
 .prose-chat p { @apply my-1.5; }
 .prose-chat p:first-child { @apply mt-0; }
-.prose-chat p:last-child { @apply mb-0; }
+.prose-chat p:last-child  { @apply mb-0; }
 .prose-chat strong { @apply font-bold; }
 .prose-chat em { @apply italic; }
 .prose-chat ul { @apply my-1.5 list-disc pl-5; }
@@ -58,7 +50,7 @@ body {
 .prose-chat h2 { @apply text-base; }
 .prose-chat h3 { @apply text-sm; }
 .prose-chat code { @apply rounded bg-slate-100 px-1 py-0.5 text-[13px] dark:bg-slate-800; }
-.prose-chat pre { @apply my-2 overflow-x-auto rounded-xl bg-slate-100 p-3 dark:bg-slate-800; }
+.prose-chat pre  { @apply my-2 overflow-x-auto rounded-xl bg-slate-100 p-3 dark:bg-slate-800; }
 .prose-chat pre code { @apply bg-transparent p-0; }
 .prose-chat blockquote { @apply my-1.5 border-l-2 border-indigo-300 pl-3 italic text-slate-500; }
 .prose-chat table { @apply my-2 w-full border-collapse text-xs; }
@@ -66,3 +58,55 @@ body {
 .prose-chat th { @apply bg-slate-50 font-semibold dark:bg-slate-800; }
 .prose-chat a { @apply text-indigo-500 underline; }
 .prose-chat hr { @apply my-2 border-slate-200 dark:border-slate-700; }
+
+/* ── shadcn CSS tokens ──────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 250 70% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 30% 96%;
+    --secondary-foreground: 250 20% 30%;
+    --muted: 250 20% 96%;
+    --muted-foreground: 250 10% 50%;
+    --accent: 250 30% 94%;
+    --accent-foreground: 250 20% 25%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 250 15% 90%;
+    --input: 250 15% 90%;
+    --ring: 250 70% 60%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 250 20% 8%;
+    --foreground: 250 10% 97%;
+    --card: 250 18% 13%;
+    --card-foreground: 250 10% 97%;
+    --popover: 250 18% 13%;
+    --popover-foreground: 250 10% 97%;
+    --primary: 250 65% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 15% 18%;
+    --secondary-foreground: 250 10% 90%;
+    --muted: 250 15% 18%;
+    --muted-foreground: 250 10% 60%;
+    --accent: 250 15% 20%;
+    --accent-foreground: 250 10% 95%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 250 15% 22%;
+    --input: 250 15% 22%;
+    --ring: 250 65% 65%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
