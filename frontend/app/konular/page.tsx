@@ -304,29 +304,30 @@ export default function KonularPage() {
         <div className="card p-5 space-y-3">
           <form
             onSubmit={(e) => { e.preventDefault(); if (input.trim()) explain(input.trim()); }}
-            className="flex gap-2"
+            className="space-y-3"
           >
+            <select value={level} onChange={(e) => setLevel(e.target.value)} className="input w-full">
+              {LEVELS.map((l) => <option key={l}>{l}</option>)}
+            </select>
             <input
-              className="input flex-1 min-w-0"
+              className="input w-full"
               placeholder="e.g. aller verb, passé composé, conjunctions…"
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <select value={level} onChange={(e) => setLevel(e.target.value)} className="input !w-20 shrink-0">
-              {LEVELS.map((l) => <option key={l}>{l}</option>)}
-            </select>
-            <button type="submit" disabled={loading === "explain"} className="btn-primary flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={suggest}
+              disabled={!!loading}
+              className="w-full flex items-center justify-center gap-2 rounded-[12px] border border-border py-2.5 text-sm font-medium text-muted-foreground transition hover:border-violet-600/40 hover:text-violet-700 dark:hover:text-violet-400"
+            >
+              <Sparkles size={15} />
+              {loading === "suggest" ? "AI thinking…" : "Suggest a topic with AI"}
+            </button>
+            <button type="submit" disabled={loading === "explain"} className="btn-primary w-full flex items-center justify-center gap-1.5">
               <Search size={15} /> Explain
             </button>
           </form>
-          <button
-            onClick={suggest}
-            disabled={!!loading}
-            className="w-full flex items-center justify-center gap-2 rounded-[12px] border border-border py-2.5 text-sm font-medium text-muted-foreground transition hover:border-violet-600/40 hover:text-violet-700 dark:hover:text-violet-400"
-          >
-            <Sparkles size={15} />
-            {loading === "suggest" ? "AI thinking…" : "Suggest a topic with AI"}
-          </button>
         </div>
 
         {error && (
