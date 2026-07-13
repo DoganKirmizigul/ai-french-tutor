@@ -73,15 +73,21 @@ export default function Navbar() {
               <Link
                 key={href}
                 href={href}
+                aria-label={label}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 py-2.5 text-[9px] font-semibold uppercase tracking-wide transition-colors",
+                  "flex flex-col items-center justify-center py-3 transition-colors",
                   active
                     ? "text-violet-700 dark:text-violet-400"
                     : "text-neutral-400 dark:text-neutral-600"
                 )}
               >
-                <Icon size={19} className={active ? "stroke-[2.5]" : "stroke-[1.8]"} />
-                {label}
+                <Icon
+                  size={22}
+                  className={active ? "stroke-[2.2]" : "stroke-[1.6]"}
+                />
+                {active && (
+                  <span className="mt-0.5 h-1 w-1 rounded-full bg-violet-700 dark:bg-violet-400" />
+                )}
               </Link>
             );
           })}
